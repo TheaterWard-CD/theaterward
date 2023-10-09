@@ -42,7 +42,7 @@ if __name__ == "__main__":
     drawing2XYdata(drawing_floor2, seat_template, seat_templateL2, seat_templateR2, floor2_name, dataFile, 2)
     drawing2XYdata(drawing_floor3, seat_template, seat_templateL2, seat_templateR2, floor3_name, dataFile, 3)
 
-    drawing2Zdata(drawing_side, seat_side_template, side_name)
+    drawing2Zdata(drawing_side, seat_side_template, side_name, dataFile)
     
     print("end")
 
