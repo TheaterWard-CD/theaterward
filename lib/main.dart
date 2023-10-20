@@ -1,12 +1,27 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:theaterward/models/user_model.dart';
 import 'package:theaterward/models/login_model.dart';
 import 'package:theaterward/models/show_model.dart';
+import 'package:theaterward/screens/search_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:theaterward/models/theater_model.dart';
 
 void main() {
+  final String URL = "http://3.35.3.49/api/";
+  final request = Uri.parse(URL + "theater");
+  var jsonResponse;
+
+  Future<dynamic> fetch() async {
+    final response = await http.get(request);
+    jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    print(jsonResponse);
+  }
+  fetch();
   runApp(const MyApp());
 }
 
@@ -21,9 +36,12 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(),
         '/login': (context) => LoginScreen(),
         '/search': (context) => SearchScreen(),
+        //'/theater': (context) => TheaterScreen(no: ,),
+        //'/seat': (context) => SeatScreen(),
       },
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: Colors.black,
+        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       initialRoute: '/',
@@ -142,21 +160,6 @@ class LoginButton extends StatelessWidget {
           Navigator.pushReplacementNamed(context, '/search');
         },
         child: const Text('로그인'),
-      ),
-    );
-  }
-}
-
-
-
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Search Screen'),
       ),
     );
   }
