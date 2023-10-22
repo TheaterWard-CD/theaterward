@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theaterward/providers/theater_providers.dart';
 import 'package:theaterward/models/theater_model.dart';
+import 'package:theaterward/screens/theater_screen.dart';
 
 String searchText = '';
 
@@ -63,7 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: <Widget>[
               Tab(child: Text('Show'),),
               Tab(child: Text('Theater'),),
@@ -78,7 +79,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             Tab(
-              child: isLoading ? Center(child: const CircularProgressIndicator(),) :
+              child: isLoading ? const Center(child: CircularProgressIndicator(),) :
               ListView.builder(
                 itemCount: theater.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -100,24 +101,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         )
 
-      ),
-    );
-  }
-}
-
-class TheaterScreen extends StatelessWidget {
-  final int no;
-
-  const TheaterScreen({Key? key, required this.no}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Theater Screen"),
-      ),
-      body: Center(
-        child: Text("Theater No: $no"),
       ),
     );
   }
