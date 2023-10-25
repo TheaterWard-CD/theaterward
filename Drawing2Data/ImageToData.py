@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from drawing2XYdata import drawing2XYdata
 from drawing2Zdata import drawing2Zdata
-
+from Data_processing import data_processing
 
 
 
@@ -23,9 +23,10 @@ if __name__ == "__main__":
     seat_templateR2 = "stage_drawing\stage_drawing_bluesqure/seat_templateR2.jpg"
     seat_side_template = "stage_drawing\stage_drawing_bluesqure/seat_side_template.jpg"
 
-    seat_num1 = 1066
-    seat_num2 = 430
-    seat_num3 = 270
+    #real first floor seat number 958      second floor 430     third floor 270 
+    seat_num1 = 936
+    seat_num2 = 391
+    seat_num3 = 256
     
 
     matching_point = "stage_drawing\stage_drawing_bluesqure/check_point.jpg"
@@ -52,7 +53,9 @@ if __name__ == "__main__":
     #make z data from image file
     drawing2Zdata(drawing_side, seat_side_template, side_name, dataFile)
     
-    print("end")
+    print("z end")
 
+    data_processing(dataFile)
+    print("end")
 
 
