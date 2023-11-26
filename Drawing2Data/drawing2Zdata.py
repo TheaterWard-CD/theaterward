@@ -65,8 +65,8 @@ def drawing2Zdata(input_side_drawing, input_side_seat_template, result_image_nam
         point = (round(pt[1]), round(pt[0]))
         cv2.line(input_image, point, point, (255,0,0), 7)
         f.write("h")        
-        f.write(" %f"%(point[0]+w/2))
-        f.write(" %f\n"%(point[1]+h/2))
+        f.write(" %d"%(point[0]+w/2))
+        f.write(" %d\n"%(point[1]+h))
         
     
 

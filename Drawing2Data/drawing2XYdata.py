@@ -102,12 +102,12 @@ def drawing2XYdata(input_drawing, input_seat_template, input_seat_templateL, inp
         point = (round(pt[1]), round(pt[0]))
         cv2.line(image_remove_color, point, point, (255,0,0), 7)
         f.write("%d"%floor)
-        f.write(" %f"%(point[0]+w/2))
-        f.write(" %f\n"%(point[1]+h/2))
+        f.write(" %d"%(point[0]+w/2))
+        f.write(" %d\n"%(point[1]+h/2))
         
-    
 
 
+    #point
     locM = np.where( resultM >= 0.9)
     for pt in zip(*locM[::-1]):
         cv2.rectangle(image_remove_color, pt, (pt[0] + wm, pt[1] + hm), (0,0,255), 2)
@@ -122,10 +122,10 @@ def drawing2XYdata(input_drawing, input_seat_template, input_seat_templateL, inp
         point = (round(pt[1]), round(pt[0]))
         cv2.line(image_remove_color, point, point, (0,200,200), 7)
         f.write("%dpoint"%floor)
-        f.write(" %f"%(point[0]))
-        f.write(" %f,"%(point[1]))
-        f.write(" %f"%(point[0]+wm))
-        f.write(" %f\n"%(point[1]+hm))
+        f.write(" %d"%(point[0]))
+        f.write(" %d"%(point[1]))
+        f.write(" %d"%(point[0]+wm))
+        f.write(" %d\n"%(point[1]+hm))
 
 
 
