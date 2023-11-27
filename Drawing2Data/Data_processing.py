@@ -39,7 +39,6 @@ def data_processing(dataFile):
         elif (split_line[0] == "wall_h"):   wall_h = (int(split_line[1].strip("[""]")), int(split_line[2].strip("[""]")))
         elif (split_line[0] == "h"):        seat_z.append(int(split_line[2]))
 
-        # print(line)
     fr.close()
     
 
@@ -111,6 +110,8 @@ def data_processing(dataFile):
     boundary_value2 = []
     boundary_value3 = []
     temp = sorted_floor1_seat[0]
+
+    #특정한 값을 넘어가는 간격은 boundary로 설정
     for (x,y) in sorted_floor1_seat:
         if(abs(temp[1]-y)>15): boundary_value1.append((x,y))    
         temp=(x,y)
@@ -125,7 +126,7 @@ def data_processing(dataFile):
         if(abs(temp[1]-y)>15): boundary_value3.append((x,y))    
         temp=(x,y)
 
-
+    #각 층의 boundary값을 기준으로 구역을 나눔
     for (x,y) in sorted_floor1_seat:
         if(y<boundary_value1[0][1]): floor1_left_seat.append((x,y,0))
         elif(y>=boundary_value1[1][1]): floor1_right_seat.append((x,y,0))
@@ -141,38 +142,7 @@ def data_processing(dataFile):
         elif(y>=boundary_value3[1][1]): floor3_right_seat.append((x,y,0))
         else: floor3_center_seat.append((x,y,0))
     
-    # model = DBSCAN(eps=22, min_samples=3, metric='manhattan')
-    
-    # labels = model.fit_predict(np.array(floor1_left_seat))    
-    # for (x,y,z) in floor1_left_seat:
-    #     idx = floor1_left_seat.index((x,y,z))
-    #     floor1_left_seat[idx] = (x,y,labels[idx])
-
-    # labels = model.fit_predict(np.array(floor1_center_seat))    
-    # for (x,y,z) in floor1_center_seat:
-    #     idx = floor1_center_seat.index((x,y,z))
-    #     floor1_center_seat[idx] = (x,y,labels[idx])
-
-    # labels = model.fit_predict(np.array(floor1_right_seat))    
-    # for (x,y,z) in floor1_right_seat:
-    #     idx = floor1_right_seat.index((x,y,z))
-    #     floor1_right_seat[idx] = (x,y,labels[idx])
-
-
-    # from mpl_toolkits.mplot3d import Axes3D
-    # # 데이터를 튜플로 변환
-    # x, y, z = zip(*floor1_right_seat)
-    # # 각 클러스터의 x 값 평균 계산
-    # cluster_x_means = {label: np.mean([xi for xi, yi, zi in zip(x, y, z) if zi == label]) for label in set(z)}
-    # print(cluster_x_means)
-    # # 클러스터를 x 값 평균에 대해 정렬
-    # sorted_clusters = sorted(cluster_x_means.keys(), key=lambda k: cluster_x_means[k])
-    # # 클러스터를 새로운 순서에 따라 z 값을 재설정
-    # new_z = [sorted_clusters.index(zi) for zi in z]
-    # print(new_z)
-    # # 결과 출력
-    # for point, new_z_value in zip(floor1_right_seat, new_z):
-    #     print(f"Original: {point}, New Z: {new_z_value}")
+    #z값 부여하기
     new_f1ls = make_z_coord(seat_z, floor1_left_seat, 0, 22)
     new_f1cs = make_z_coord(seat_z, floor1_center_seat, 0, 22)
     new_f1rs = make_z_coord(seat_z, floor1_right_seat, 0, 22)
@@ -185,6 +155,7 @@ def data_processing(dataFile):
     new_f3cs = make_z_coord(seat_z, floor3_center_seat, 32, 6, fragment=1)
     new_f3rs = make_z_coord(seat_z, floor3_right_seat, 32, 6)
 
+    #좌석 합치기
     final_seats = new_f1ls + new_f1cs + new_f1rs + new_f2ls + new_f2cs + new_f2rs + new_f3ls + new_f3cs + new_f3rs
 
     # x,y,z = zip(*final_seats)
@@ -201,6 +172,8 @@ def data_processing(dataFile):
 
     # # 그래프 보여주기
     # plt.show()
+
+
 
     #rewriting data
     f = open(dataFile, 'w')
@@ -231,26 +204,11 @@ def data_processing(dataFile):
         f.write("%d "%pt[0])
         f.write("%d "%pt[1])
         f.write("%d\n"%pt[2])
-        
-    # for pt in floor1_xy:
-    #     f.write("1 ")
-    #     f.write("%d "%pt[0])
-    #     f.write("%d\n"%pt[1])
-        
-    # for pt in fixed_floor2_xy:
-    #     f.write("2 ")
-    #     f.write("%d "%pt[0])
-    #     f.write("%d\n"%pt[1])
-
-    # for pt in fixed_floor3_xy:
-    #     f.write("3 ")
-    #     f.write("%d "%pt[0])
-    #     f.write("%d\n"%pt[1])
-
-    
 
     f.close()
 
+
+#dbscan을 이용하여 각 좌석의 z값 만들기
 def make_z_coord(seat_z, seats, row_init, row_num, fragment = 0):
     model = DBSCAN(eps=22, min_samples=3, metric='manhattan')
     
@@ -281,6 +239,7 @@ def make_z_coord(seat_z, seats, row_init, row_num, fragment = 0):
             current_mean = cluster_x_means[cur_cluster]
             next_mean = cluster_x_means[next_cluster]
 
+            #값의 차이가 5 이하이면 보다 큰 클러스터링 넘버를 작은값으로 바꾸고 그보다 큰값들의 클러스터링 넘버를 1씩 감소
             if abs(current_mean - next_mean)<=5:
                 if(next_cluster>cur_cluster):
                     merged_clusters[next_cluster] = cur_cluster
