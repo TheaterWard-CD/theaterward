@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:theaterward/models/theater_model.dart';
+import 'package:theaterward/screens/theater_screen.dart';
 
 void main() {
   final String URL = "http://3.35.3.49/api/";
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(),
         '/login': (context) => LoginScreen(),
         '/search': (context) => SearchScreen(),
-        //'/theater': (context) => TheaterScreen(no: ,),
+        //'/theater': (context) => TheaterScreen(),
         //'/seat': (context) => SeatScreen(),
       },
       theme: ThemeData(

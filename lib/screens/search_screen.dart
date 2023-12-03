@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:theaterward/providers/theater_providers.dart';
 import 'package:theaterward/models/theater_model.dart';
 import 'package:theaterward/screens/theater_screen.dart';
+import 'package:theaterward/providers/show_providers.dart';
+import 'package:theaterward/models/show_model.dart';
 
 String searchText = '';
 
@@ -14,11 +16,17 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Theater> theater = [];
+  List<Show> show = [];
   bool isLoading = true;
   TheaterProviders theaterProvider = TheaterProviders();
+  ShowProviders showProviders = ShowProviders();
 
   Future initTheater() async {
     theater = await theaterProvider.getTheaters();
+  }
+
+  Future initShow() async {
+    show = await showProviders.getShows();
   }
 
   void theaterClick(BuildContext context, int index){
@@ -29,10 +37,23 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  void showClick(BuildContext context, int index){
+    int showNo = show[index].no!;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TheaterScreen(no: showNo)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     initTheater().then((_) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+    initShow().then((_) {
       setState(() {
         isLoading = false;
       });
@@ -49,12 +70,22 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Icon(Icons.search),
+              SizedBox(width: 8,),
               Flexible(
                   flex: 1,
                   child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        hintText: '검색 키워드를 입력해주세요',
+                      ),
                     onChanged: (value){
                       setState(() {
                         searchText = value;
@@ -74,9 +105,24 @@ class _SearchScreenState extends State<SearchScreen> {
         body: TabBarView(
           children: <Widget>[
             Tab(
-              child: ListView(
-
-              ),
+                child: isLoading ? const Center(child: CircularProgressIndicator(),) :
+                ListView.builder(
+                  itemCount: show.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (searchText.isNotEmpty && !show[index].name!.toLowerCase().contains(searchText.toLowerCase())) {
+                      return SizedBox.shrink();
+                    }
+                    else {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TextButton(
+                            onPressed: () => showClick(context, index),
+                            child: Text(show[index].name!)
+                        ),
+                      );
+                    }
+                  },
+                )
             ),
             Tab(
               child: isLoading ? const Center(child: CircularProgressIndicator(),) :
