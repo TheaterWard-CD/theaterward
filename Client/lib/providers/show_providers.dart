@@ -4,7 +4,7 @@ import 'package:theaterward/models/show_model.dart';
 import 'package:http/http.dart' as http;
 
 class ShowProviders{
-  Uri request = Uri.parse("http://3.35.3.49/api/show");
+  Uri request = Uri.parse("http://3.35.3.49/api/shows");
 
   var jsonResponse;
 
@@ -16,5 +16,4 @@ class ShowProviders{
     }).toList();
     return shows;
   }
-
 }

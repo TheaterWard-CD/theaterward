@@ -12,14 +12,14 @@ class Show {
 
   factory Show.fromJson(Map<String, dynamic> json) {
     return Show(
-      name: json['show_name'],
-      year: json['show_year'],
-      no: json['show_no'],
+      name: json['showName'],
+      year: json['showYear'],
+      no: json['theaterNo'],
     );
   }
   Map<String, dynamic> toJson() => {
-    'show_name': name,
-    'show_year': year,
-    'show_no': no,
+    'showName': name,
+    'showYear': year,
+    'theaterNo': no,
   };
 }

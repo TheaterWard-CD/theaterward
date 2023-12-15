@@ -6,9 +6,10 @@ import 'package:book_my_seat/book_my_seat.dart';
 
 class TheaterScreen extends StatefulWidget {
   final int no;
+  final int type;
   SeatProviders seatProviders = SeatProviders(theaterNo: 1);
 
-  TheaterScreen({Key? key, required this.no}) {
+  TheaterScreen({Key? key, required this.no, required this.type}) {
     key = super.key;
     seatProviders = SeatProviders(theaterNo: no);
   }
@@ -38,7 +39,7 @@ class _TheaterScreenState extends State<TheaterScreen> {
   void seatClick(BuildContext context, int index){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SeatScreen(seat: seat[index])),
+      MaterialPageRoute(builder: (context) => SeatScreen(seat: seat[index], type: widget.type,)),
     );
   }
 

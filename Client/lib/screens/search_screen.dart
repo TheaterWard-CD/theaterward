@@ -17,7 +17,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<Theater> theater = [];
   List<Show> show = [];
-  bool isLoading = true;
+  bool isLoadingShow = true;
+  bool isLoadingTheater = true;
   TheaterProviders theaterProvider = TheaterProviders();
   ShowProviders showProviders = ShowProviders();
 
@@ -33,15 +34,15 @@ class _SearchScreenState extends State<SearchScreen> {
     int theaterNo = theater[index].no!;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TheaterScreen(no: theaterNo)),
+      MaterialPageRoute(builder: (context) => TheaterScreen(no: theaterNo, type: 2,)),
     );
   }
 
   void showClick(BuildContext context, int index){
-    int showNo = show[index].no!;
+    int theaterNo = show[index].no!;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TheaterScreen(no: showNo)),
+      MaterialPageRoute(builder: (context) => TheaterScreen(no: theaterNo, type: 1,)),
     );
   }
 
@@ -50,12 +51,12 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     initTheater().then((_) {
       setState(() {
-        isLoading = false;
+        isLoadingTheater = false;
       });
     });
     initShow().then((_) {
       setState(() {
-        isLoading = false;
+        isLoadingShow = false;
       });
     });
   }
@@ -105,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
         body: TabBarView(
           children: <Widget>[
             Tab(
-                child: isLoading ? const Center(child: CircularProgressIndicator(),) :
+                child: isLoadingShow ? const Center(child: CircularProgressIndicator(),) :
                 ListView.builder(
                   itemCount: show.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -125,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 )
             ),
             Tab(
-              child: isLoading ? const Center(child: CircularProgressIndicator(),) :
+              child: isLoadingTheater ? const Center(child: CircularProgressIndicator(),) :
               ListView.builder(
                 itemCount: theater.length,
                 itemBuilder: (BuildContext context, int index) {
